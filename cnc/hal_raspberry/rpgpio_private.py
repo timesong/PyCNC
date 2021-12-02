@@ -11,6 +11,7 @@ import ctypes
 # https://www.raspberrypi.org/wp-content/uploads/2012/02/BCM2835-ARM-Peripherals.pdf
 RPI1_PERI_BASE = 0x20000000
 RPI2_3_PERI_BASE = 0x3F000000
+PRI4_PERI_BASE = 0x47C000000 # LOCAL_PERI_BASE = 0x4C0000000
 # detect board version
 try:
     with open("/proc/cpuinfo", "r") as f:
@@ -25,8 +26,10 @@ try:
             raise ImportError("This is not raspberry pi board.")
         elif r.group(1) in RPI_1_REVISIONS:
             PERI_BASE = RPI1_PERI_BASE
-        elif "BCM2" in h.group(1):
+        elif "BCM28" in h.group(1):
             PERI_BASE = RPI2_3_PERI_BASE
+        elif "BCM27" in h.group(1):
+            PERI_BASE = PRI4_PERI_BASE
         else:
             raise ImportError("Unknown board.")
 except IOError:
